@@ -3,7 +3,7 @@ id: training
 name: Internal training
 
 content:
-  url: https://raw.githubusercontent.com/dbecvarik/workshopper-content/cicd
+  url: https://raw.githubusercontent.com/dbecvarik/workshopper-content/demo
 
 vars:
   USER_NAME: "(email)"
