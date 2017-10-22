@@ -1,7 +1,7 @@
 ## Lab: CI/CD with blue green deployment
 
 ### Application Description
-In this lab we are going to deploy 2 custom made application on OpenShift:
+In this lab we are going to deploy 2 custom made applications on OpenShift:
 
 - demo-color-api - serves as a public facing app
 - demo-color-backend - serves data to demo-color-api
@@ -57,7 +57,7 @@ $ oc process -f demo-color-backend/template.pipeline.yaml | oc apply -f -
 - Login to Jenkins a look at the defined pipeline
 
 
-### Exercise demo-color-api
+### Exercise: demo-color-api
 
 This service serves as our public facing application we will access during workshop. It uses
 demo-color-backend via its master route.
@@ -106,7 +106,7 @@ $ oc process -f demo-color-api/template.pipeline.yaml | oc apply -f -
 - Determine which deployment (blue or green is accessible via master route)
 
 
-** Exercise: Blue green deployment
+## Exercise: Blue green deployment
 
 Login to do OpenShift console and via `Builds -> Pipelines` and stat demo-color-backend pipeline
 via `Start Pipeline`.
