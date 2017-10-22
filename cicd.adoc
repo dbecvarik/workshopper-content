@@ -33,44 +33,7 @@ We need to deploy DeploymentConfig, service and a Route.
 To deploy a blue one, run:
 [source]
 --------
-$ oc process -f demo-color-backend/template.app.yaml COLOR=blue | oc apply -f -
---------
-
-To deploy a green one, run:
-[source]
---------
-$ oc process -f demo-color-backend/template.app.yaml COLOR=green | oc apply -f -
---------
-
-Finally we need to deploy our pipeline, which is responsible for deploying our
-application and switching master route. To do it, run:
-
-[source]
---------
-$ oc process -f demo-color-backend/template.pipeline.yaml | oc apply -f -
---------
-
-*Tasks:*
-
-- Use cat and compare template definition with objects defined in corresponding OpenShift Projects
-- Login to Jenkins a look at the defined pipeline
-
-
-### Exercise demo-color-api
-
-This service serves as our public facing application we will access during workshop. It uses
-demo-color-backend via its master route.
-
-We begin with cloning demo-control-api repository
-
-[source]
---------
-$ git clone https://github.com/prgcont/demo-color-backend
---------
-
-
-[source]
---------
+$ oc new-project backend
 $ oc process -f demo-color-backend/template.app.yaml COLOR=blue | oc apply -f -
 --------
 
@@ -109,6 +72,7 @@ $ git clone https://github.com/prgcont/demo-color-backend
 Again, we will deploy blue and green apps, starting with blue:
 [source]
 --------
+$ oc new-project api
 $ oc process -f demo-color-api/template.app.yaml COLOR=green | oc apply -f -
 --------
 
@@ -118,27 +82,40 @@ And a green one:
 $ oc process -f demo-color-api/template.app.yaml COLOR=green | oc apply -f -
 --------
 
-[source]
---------
---------
+These will also deploy a master route which will allow us switch between deployments
+
+We also need to configure our application. There is a URL expected in configmap.yaml file. The value should match the master route host value from https://github.com/prgcont/demo-color-backend. The value needs to be in a form ``http://$HOST:$PORT``. You can obviously omit $PORT if it equals to 80.
+
+After you update the value there, you'll need to upload the config to OpenShift
 
 [source]
 --------
-
+$ oc apply -f demo-color-api/configmap.yaml
 --------
 
-[source]
---------
-$ 
---------
+At the end, we will again deploy the pipeline.
 
 [source]
 --------
-$ 
+$ oc process -f demo-color-api/template.pipeline.yaml | oc apply -f -
 --------
 
-[source]
---------
-$ 
---------
+*Tasks:*
 
+- Access demo-color-api applications via blue and green route.
+- Determine which deployment (blue or green is accessible via master route)
+
+
+** Exercise: Blue green deployment
+
+Login to do OpenShift console and via `Builds -> Pipelines` and stat demo-color-backend pipeline
+via `Start Pipeline`.
+
+Once the build is finished, you should to your new deployment.
+
+*Tasks:*
+
+- Do multiple demo-color-backend and demo-color-api deployment switches
+- Explain how blue and green deployment of demo-color-backend changed demo-color-api
+- Try to not proceed your deployment, what happens?
+- Try to patch master route manually
