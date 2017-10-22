@@ -1,6 +1,6 @@
 ---
-id: training
-name: Internal training
+id: cicd
+name: cicd
 
 content:
   url: https://raw.githubusercontent.com/dbecvarik/workshopper-content/demo
