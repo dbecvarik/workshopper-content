@@ -1,0 +1,144 @@
+## Lab: CI/CD with blue green deployment
+
+### Application Description
+In this lab we are going to deploy 2 custom made application on OpenShift:
+
+- demo-color-api - serves as a public facing app
+- demo-color-backend - serves data to demo-color-api
+
+We will show you how to deploy these application on OpenShift, how to use Jenkins
+to achieve continuous integration and continuous delivery of these application
+on OpenShift.
+
+Finally we will show you how to achieve deployment stability via Blue/Green
+deployment. Blue/Green deployment is a technique to address the challenges
+of continuous deployment like a minimizing downtime during new version enrollment.
+It also enables you to quickly rollback any changes as it is based about the idea
+of having two identical environment called "blue" and "green" and switching
+between them
+
+### Exercise: Deploy demo-color-backend
+
+We will deploy demo-color-backend application on our OpenShift cluster. To be able
+to do it, we will first app repository:
+
+[source]
+--------
+$ git clone https://github.com/prgcont/demo-color-backend
+--------
+
+As we mentioned above, we will need to deploy this service to two environments.
+We need to deploy DeploymentConfig, service and a Route. 
+
+To deploy a blue one, run:
+[source]
+--------
+$ oc process -f demo-color-backend/template.app.yaml COLOR=blue | oc apply -f -
+--------
+
+To deploy a green one, run:
+[source]
+--------
+$ oc process -f demo-color-backend/template.app.yaml COLOR=green | oc apply -f -
+--------
+
+Finally we need to deploy our pipeline, which is responsible for deploying our
+application and switching master route. To do it, run:
+
+[source]
+--------
+$ oc process -f demo-color-backend/template.pipeline.yaml | oc apply -f -
+--------
+
+*Tasks:*
+
+- Use cat and compare template definition with objects defined in corresponding OpenShift Projects
+- Login to Jenkins a look at the defined pipeline
+
+
+### Exercise demo-color-api
+
+This service serves as our public facing application we will access during workshop. It uses
+demo-color-backend via its master route.
+
+We begin with cloning demo-control-api repository
+
+[source]
+--------
+$ git clone https://github.com/prgcont/demo-color-backend
+--------
+
+
+[source]
+--------
+$ oc process -f demo-color-backend/template.app.yaml COLOR=blue | oc apply -f -
+--------
+
+To deploy a green one, run:
+[source]
+--------
+$ oc process -f demo-color-backend/template.app.yaml COLOR=green | oc apply -f -
+--------
+
+Finally we need to deploy our pipeline, which is responsible for deploying our
+application and switching master route. To do it, run:
+
+[source]
+--------
+$ oc process -f demo-color-backend/template.pipeline.yaml | oc apply -f -
+--------
+
+*Tasks:*
+
+- Use cat and compare template definition with objects defined in corresponding OpenShift Projects
+- Login to Jenkins a look at the defined pipeline
+
+
+### Exercise demo-color-api
+
+This service serves as our public facing application we will access during workshop. It uses
+demo-color-backend via its master route.
+
+We begin with cloning demo-control-api repository
+
+[source]
+--------
+$ git clone https://github.com/prgcont/demo-color-backend
+--------
+
+Again, we will deploy blue and green apps, starting with blue:
+[source]
+--------
+$ oc process -f demo-color-api/template.app.yaml COLOR=green | oc apply -f -
+--------
+
+And a green one:
+[source]
+--------
+$ oc process -f demo-color-api/template.app.yaml COLOR=green | oc apply -f -
+--------
+
+[source]
+--------
+--------
+
+[source]
+--------
+
+--------
+
+[source]
+--------
+$ 
+--------
+
+[source]
+--------
+$ 
+--------
+
+[source]
+--------
+$ 
+--------
+
