@@ -16,12 +16,6 @@ It also enables you to quickly rollback any changes as it is based about the ide
 of having two identical environment called "blue" and "green" and switching
 between them
 
-You should be working in a separate project. To create it, please run:
-[source]
---------
-$ oc new-project my-project-name
---------
-
 ### Exercise: Deploy demo-color-backend
 
 We will deploy demo-color-backend application on our OpenShift cluster. To be able
