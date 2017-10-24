@@ -32,13 +32,13 @@ We need to deploy DeploymentConfig, service and a Route.
 To deploy a blue one, run:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/demo-color-backend/template.app.yaml COLOR=blue | oc apply -f -
+$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.app.yaml COLOR=blue | oc apply -f -
 --------
 
 To deploy a green one, run:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/demo-color-backend/template.app.yaml COLOR=green | oc apply -f -
+$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.app.yaml COLOR=green | oc apply -f -
 --------
 
 Finally we need to deploy our pipeline, which is responsible for deploying our
@@ -46,7 +46,7 @@ application and switching master route. To do it, run:
 
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/demo-color-backend/template.pipeline.yaml | oc apply -f -
+$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.pipeline.yaml | oc apply -f -
 --------
 
 *Tasks:*
@@ -70,13 +70,13 @@ $ git clone https://github.com/prgcont/demo-color-backend
 Again, we will deploy blue and green apps, starting with blue:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/demo-color-api/template.app.yaml COLOR=green | oc apply -f -
+$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=green | oc apply -f -
 --------
 
 And a green one:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/demo-color-api/template.app.yaml COLOR=green | oc apply -f -
+$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=green | oc apply -f -
 --------
 
 These will also deploy a master route which will allow us switch between deployments
@@ -87,14 +87,14 @@ After you update the value there, you'll need to upload the config to OpenShift
 
 [source]
 --------
-$ oc apply -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/demo-color-api/configmap.yaml
+$ oc apply -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/configmap.yaml
 --------
 
 At the end, we will again deploy the pipeline.
 
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/demo-color-api/template.pipeline.yaml | oc apply -f -
+$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.pipeline.yaml | oc apply -f -
 --------
 
 *Tasks:*
