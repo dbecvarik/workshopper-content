@@ -70,7 +70,6 @@ $ git clone https://github.com/prgcont/demo-color-backend
 Again, we will deploy blue and green apps, starting with blue:
 [source]
 --------
-$ oc new-project api
 $ oc process -f demo-color-api/template.app.yaml COLOR=green | oc apply -f -
 --------
 
