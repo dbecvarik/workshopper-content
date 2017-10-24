@@ -113,6 +113,8 @@ config:
       value: "3.5"
 
 modules:
+  cicd:
+    name: CI/CD deployment
   environment:
     name: Environment Overview
     vars:
