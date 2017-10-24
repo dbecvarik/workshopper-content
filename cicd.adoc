@@ -49,6 +49,14 @@ application and switching master route. To do it, run:
 $ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.pipeline.yaml | oc apply -f -
 --------
 
+You can see whats happening in the cluster by invoking:
+[source]
+--------
+$ oc get all
+--------
+
+Alternatively, you can use OpenShift web console to examine deployed resources.
+
 *Tasks:*
 
 - Use cat and compare template definition with objects defined in corresponding OpenShift Projects
@@ -70,7 +78,7 @@ $ git clone https://github.com/prgcont/demo-color-backend
 Again, we will deploy blue and green apps, starting with blue:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=green | oc apply -f -
+$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=blue | oc apply -f -
 --------
 
 And a green one:
@@ -96,6 +104,15 @@ At the end, we will again deploy the pipeline.
 --------
 $ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.pipeline.yaml | oc apply -f -
 --------
+
+You can see whats happening in the cluster by invoking:
+[source]
+--------
+$ oc get all
+--------
+
+Alternatively, you can use OpenShift web console to examine deployed resources.
+
 
 *Tasks:*
 
