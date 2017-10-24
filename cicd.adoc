@@ -1,6 +1,5 @@
 ## Lab: CI/CD with blue green deployment
 
-### Application Description
 In this lab we are going to deploy 2 custom made applications on OpenShift:
 
 - demo-color-api - serves as a public facing app
@@ -16,6 +15,12 @@ of continuous deployment like a minimizing downtime during new version enrollmen
 It also enables you to quickly rollback any changes as it is based about the idea
 of having two identical environment called "blue" and "green" and switching
 between them
+
+You should be working in a separate project. To create it, please run:
+[source]
+--------
+$ oc new-project my-project-name
+--------
 
 ### Exercise: Deploy demo-color-backend
 
@@ -33,7 +38,6 @@ We need to deploy DeploymentConfig, service and a Route.
 To deploy a blue one, run:
 [source]
 --------
-$ oc new-project backend
 $ oc process -f demo-color-backend/template.app.yaml COLOR=blue | oc apply -f -
 --------
 
