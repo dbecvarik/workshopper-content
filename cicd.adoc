@@ -72,7 +72,7 @@ We begin with cloning demo-control-api repository
 
 [source]
 --------
-$ git clone https://github.com/prgcont/demo-color-backend
+$ git clone https://github.com/prgcont/demo-color-api
 --------
 
 Again, we will deploy blue and green apps, starting with blue:
