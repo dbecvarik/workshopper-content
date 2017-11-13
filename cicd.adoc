@@ -1,4 +1,4 @@
-## Lab: CI/CD with blue green deployment
+== Lab: CI/CD with blue green deployment
 
 In this lab we are going to deploy 2 custom made applications on OpenShift:
 
@@ -16,18 +16,20 @@ It also enables you to quickly rollback any changes as it is based about the ide
 of having two identical environment called "blue" and "green" and switching
 between them
 
-### Exercise: Deploy demo-color-backend
+=== Exercise: Deploy demo-color-backend
 
 *Login to oc cluster*
 
 Go to `https://<OC-CLUSTER-ADDRESS>/console/command-line` and copy `oc login ...` snippet.
 
+[source]
 --------
 $ oc login ...
 --------
 
 *Create project*
 
+[source]
 --------
 $ oc new-project <NAME>
 --------
@@ -78,7 +80,7 @@ Alternatively, you can use OpenShift web console to examine deployed resources.
 - Login to Jenkins a look at the defined pipeline
 
 
-### Exercise: demo-color-api
+=== Exercise: Deploy demo-color-api
 
 This service serves as our public facing application we will access during workshop. It uses
 demo-color-backend via its master route.
@@ -135,7 +137,7 @@ Alternatively, you can use OpenShift web console to examine deployed resources.
 - Determine which deployment (blue or green is accessible via master route)
 
 
-## Exercise: Blue green deployment
+=== Exercise: Blue green deployment
 
 Login to do OpenShift console and via `Builds -> Pipelines` and stat demo-color-backend pipeline
 via `Start Pipeline`.
@@ -148,3 +150,119 @@ Once the build is finished, you should to your new deployment.
 - Explain how blue and green deployment of demo-color-backend changed demo-color-api
 - Try to not proceed your deployment, what happens?
 - Try to patch master route manually
+
+
+=== Exercise: Canary Deployment
+
+Canary deployments serves a purpose, when you want to test a new features on a limited amount of users. In this style of deployment we
+will enhance our blue/green deployment pipeline to use canary deployment.
+
+To perform it, we will edit our backend buildConfig:
+[source]
+--------
+oc edit bc/demo-color-backend-pipeline
+--------
+
+and we will update pipeline to looks like:
+
+[source]
+--------
+def appName=""
+def project=""
+def tag="blue"
+def altTag="green"
+def verbose="true"
+node ('master') {
+  stage('Initialize') {
+    appName=sh(script:'echo $JOB_BASE_NAME | sed "s/[^-]*-\\(.*\\)-[^-]*/\\1/"', returnStdout: true).trim()
+    project=env.PROJECT_NAME
+
+    active=sh(script: "oc get route ${appName} -n ${project} -o jsonpath='{ .spec.to.name }' | sed 's/.*-\\([^-]*\\)/\\1/'", returnStdout: true).trim()
+    if (active == tag) {
+      tag = altTag
+      altTag = active
+    }
+  }
+
+  stage('Build') {
+    openshiftBuild(buildConfig: appName, showBuildLogs: "true")
+  }
+
+  stage('Deploy') {
+    openshiftTag(sourceStream: appName, sourceTag: 'latest', destinationStream: appName, destinationTag: tag)
+    openshiftVerifyDeployment(deploymentConfig: "${appName}-${tag}")
+  }
+
+  stage('Canary') {
+  sh "oc set -n ${project} route-backends ${appName} ${appName}-${tag}=20 ${appName}-${altTag}=80"
+
+  }
+
+  stage('Verify') {
+    def activeRoute = sh(script: "oc get route ${appName}-${tag} -n ${project} -o jsonpath='{ .spec.host }'", returnStdout: true).trim()
+    try {
+       input message: "Test deployment: http://${activeRoute}. Approve?", id: "approval"
+    } catch (error) {
+        sh "oc set -n ${project} route-backends ${appName} ${appName}-${tag}=0 ${appName}-${altTag}=100"
+        currentBuild.result = 'ABORTED'
+        error('Aborted')
+      }
+  }
+
+  stage 'Promote'
+  sh "oc set -n ${project} route-backends ${appName} ${appName}-${tag}=100 ${appName}-${altTag}=0"
+
+}
+--------
+
+
+
+*Tasks:*
+
+- Enhance pipeline to contain multiple canary steps, first 20% users, then 40% users, then full switch
+- Edit route ratio manually via command line and web console
+
+=== Exercise: Load Balancing and Session Affinity
+
+Session affinity can be very important in blue/green or canary deployments scnarios. OpenShift router (we will be speaking about HA proxy
+as it is the default option) can balance load based on following strategies:
+
+- ``roundrobin``: Each endpoint is used in turn, according to its weight. This is the smoothest and fairest algorithm when the server’s processing time remains equally distributed.
+- ``leastconn``: The endpoint with the lowest number of connections receives the request. Round-robin is performed when multiple endpoints have the same lowest number of connections. Use this algorithm when very long sessions are expected, such as LDAP, SQL, TSE, or others. Not intended to be used with protocols that typically use short sessions such as HTTP.
+
+- ``source``: The source IP address is hashed and divided by the total weight of the running servers to designate which server will receive the request. This ensures that the same client IP address will always reach the same server as long as no server goes down or up. If the hash result changes due to the number of running servers changing, many clients will be directed to different servers. This algorithm is generally used with passthrough routes.
+
+We will now change our router to distribute our requests via roundrobin scheme:
+
+[source]
+--------
+oc annotate route --overwrite  demo-color-backend  haproxy.router.openshift.io/balance=roundrobin
+--------
+
+After that, start pipeline and try to access service periodically via curl, to see the results:
+
+[source]
+--------
+$ curl http://${IP}/api/v1/color
+--------
+
+You should see different output for different curl calls.
+
+Then we can use curl, to catch a cookie for a proper endpoint via:
+
+[source]
+--------
+$ curl -c cookie http://${IP}/api/v1/color
+--------
+
+And we can reuse it to reach our endpoint all the time:
+
+[source]
+--------
+$ curl -b cookie http://${IP}/api/v1/color
+--------
+
+
+*Tasks:*
+
+- Change load balancing back to source IP and show that even without cookies you'll get same endpoint all the time.
