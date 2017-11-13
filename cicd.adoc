@@ -18,6 +18,21 @@ between them
 
 ### Exercise: Deploy demo-color-backend
 
+*Login to oc cluster*
+
+Go to `https://<OC-CLUSTER-ADDRESS>/console/command-line` and copy `oc login ...` snippet.
+
+--------
+$ oc login ...
+--------
+
+*Create project*
+
+--------
+$ oc new-project <NAME>
+--------
+
+
 We will deploy demo-color-backend application on our OpenShift cluster. To be able
 to do it, we will first app repository:
 
@@ -27,7 +42,7 @@ $ git clone https://github.com/prgcont/demo-color-backend
 --------
 
 As we mentioned above, we will need to deploy this service to two environments.
-We need to deploy DeploymentConfig, service and a Route. 
+We need to deploy DeploymentConfig, service and a Route.
 
 To deploy a blue one, run:
 [source]
