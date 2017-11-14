@@ -66,6 +66,8 @@ You can see whats happening in the cluster by invoking:
 oc get all
 --------
 
+To see the backend output, access the route presented in the Jenkins Pipeline job console output and add `/api/v1/color` to the url.
+
 Alternatively, you can use OpenShift web console to examine deployed resources.
 
 *Tasks:*
