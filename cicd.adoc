@@ -20,7 +20,7 @@ between them
 
 *Login to oc cluster*
 
-Go to `https://<OC-CLUSTER-ADDRESS>/console/command-line` and copy `oc login ...` snippet.
+Go to https://console.prague.gce.pixy.io:8443/console/ and copy `oc login ...` snippet.
 
 [source]
 --------
