@@ -24,14 +24,14 @@ Go to https://console.prague.gce.pixy.io:8443/console/ and copy `oc login ...` s
 
 [source]
 --------
-$ oc login ...
+oc login ...
 --------
 
 *Create project*
 
 [source]
 --------
-$ oc new-project <NAME>
+oc new-project <NAME>
 --------
 
 
@@ -43,13 +43,13 @@ We need to deploy DeploymentConfig, service and a Route.
 To deploy a blue one, run:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.app.yaml COLOR=blue | oc apply -f -
+oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.app.yaml COLOR=blue | oc apply -f -
 --------
 
 To deploy a green one, run:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.app.yaml COLOR=green | oc apply -f -
+oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.app.yaml COLOR=green | oc apply -f -
 --------
 
 Finally we need to deploy our pipeline, which is responsible for deploying our
@@ -57,13 +57,13 @@ application and switching master route. To do it, run:
 
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.pipeline.yaml | oc apply -f -
+oc process -f https://raw.githubusercontent.com/prgcont/demo-color-backend/master/template.pipeline.yaml | oc apply -f -
 --------
 
 You can see whats happening in the cluster by invoking:
 [source]
 --------
-$ oc get all
+oc get all
 --------
 
 Alternatively, you can use OpenShift web console to examine deployed resources.
@@ -84,13 +84,13 @@ As for the backend service, code, deployment configuration and pipeline definiti
 Again, we will deploy blue and green apps, starting with blue:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=blue | oc apply -f -
+oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=blue | oc apply -f -
 --------
 
 And a green one:
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=green | oc apply -f -
+oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.app.yaml COLOR=green | oc apply -f -
 --------
 
 These will also deploy a master route which will allow us switch between deployments
@@ -101,7 +101,7 @@ First we'll need to upload the config to OpenShift
 
 [source]
 --------
-$ oc apply -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/configmap.yaml
+oc apply -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/configmap.yaml
 --------
 
 Then you can either edit the ConfigMap directly in OpenShift console (Resources > Config Maps > demo-color-api, click Edit from the top-right menu) or by running
@@ -114,13 +114,13 @@ At the end, we will again deploy the pipeline.
 
 [source]
 --------
-$ oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.pipeline.yaml | oc apply -f -
+oc process -f https://raw.githubusercontent.com/prgcont/demo-color-api/master/template.pipeline.yaml | oc apply -f -
 --------
 
 You can see whats happening in the cluster by invoking:
 [source]
 --------
-$ oc get all
+oc get all
 --------
 
 Alternatively, you can use OpenShift web console to examine deployed resources.
@@ -238,7 +238,7 @@ After that, start pipeline and try to access service periodically via curl, to s
 
 [source]
 --------
-$ curl http://${IP}/api/v1/color
+curl http://${IP}/api/v1/color
 --------
 
 You should see different output for different curl calls.
@@ -247,14 +247,14 @@ Then we can use curl, to catch a cookie for a proper endpoint via:
 
 [source]
 --------
-$ curl -c cookie http://${IP}/api/v1/color
+curl -c cookie http://${IP}/api/v1/color
 --------
 
 And we can reuse it to reach our endpoint all the time:
 
 [source]
 --------
-$ curl -b cookie http://${IP}/api/v1/color
+curl -b cookie http://${IP}/api/v1/color
 --------
 
 
